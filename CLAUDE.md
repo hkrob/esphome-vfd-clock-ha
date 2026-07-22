@@ -19,6 +19,14 @@ without checking the resulting RAM/flash headroom.
 
 ## Build / compile / deploy
 
+**Status as of 2026-07-22:** `.12` is caught up with `.10`/this repo —
+`ehvclock-ha.yaml` there was validated, compiled, and installed
+successfully (confirmed via `.device-builder.json`'s `_firmware_jobs` log,
+both `compile` and `upload` jobs `status: "completed"`), and the device
+came back up cleanly afterward. Includes the warmup animation, status
+cues, night dimming, WiFi fix, and hourly pulse — `.12` is no longer the
+stale pre-history copy it started as.
+
 Same dual-host setup as the `esphomeclock` sibling project — **iterate on
 `.10`, promote to `.12` once confirmed working**:
 
@@ -80,7 +88,6 @@ RTC) plus stock ESPHome core components and `lambda:` blocks. Key pieces:
   toggle 12h/24h mode, alternate date format, alternate timezone, and text
   replacement/localization modes. See the `binary_sensor:` block before
   adding a sixth gesture — timing windows are already tightly packed.
-  # Home Assistant integration
 - **`sensor.vfd_clock_data`** — a single HA entity whose *attributes*
   (0 through 9) get read as separate `homeassistant` text_sensors and
   rotated through on-screen. This is how arbitrary HA data (weather, etc.)
