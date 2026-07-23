@@ -96,6 +96,18 @@ RTC) plus stock ESPHome core components and `lambda:` blocks. Key pieces:
   pushes a short-lived message onto the display (`message_alive_time` /
   `message_display_time` / `message_clock_time` control how it interacts
   with the normal clock rotation).
+- This device does **not** currently use `api: on_client_connected`/
+  `on_client_disconnected` (its "WIFI OK"/"WIFI LOST" status cues come from
+  `wifi: on_connect`/`on_disconnect` instead, which is safe — WiFi link
+  state is genuinely per-device). **Gotcha if that ever changes:**
+  `on_client_connected`/`on_client_disconnected` fire for *any* API client,
+  not specifically Home Assistant, and this device — like `esphomeclock` —
+  is now registered in two separate ESPHome dashboards (`.10` and `.12`).
+  If HA-API-connection tracking is ever added here, track a connected-client
+  **count**, not a single bool, or one dashboard's own status-check
+  connection blipping will falsely flip it to "disconnected" while HA's
+  real connection stays up (this bit `esphomeclock` — see that repo's
+  `PROJECT_PROMPT.md` §6 and build v7 for the fix).
 - Text replacement filters (`text_sensor: - platform: template`, `time_text`/
   `date_text`/`dateA_text`) substitute in Chinese characters for AM/PM,
   months, and weekdays when replacement mode is active — see the
